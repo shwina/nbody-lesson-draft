@@ -1,7 +1,7 @@
 ---
 layout: page
-title: Lesson Title
-subtitle: Topic Title One
+title: Testing Scientific Software
+subtitle: The n-body problem
 minutes: 10
 ---
 > ## Learning Objectives {.objectives}
