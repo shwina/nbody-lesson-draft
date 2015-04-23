@@ -36,6 +36,7 @@ print BODIES['body-2'][0]
 
 We're also re-setting our system for every new test:
 
+~~~{.python}
 BODIES = {
     'body-1': ([-0.5, 0.0, 0.0], [0.0, 0.0, 0.0], 1),
     'body-2': ([0.5, 0.0, 0.0], [0.0, 0.0, 0.0], 1)
@@ -43,6 +44,7 @@ BODIES = {
 
 SYSTEM = list(BODIES.values())
 PAIRS = combinations(SYSTEM)
+~~~
 
 This is a great first step---
 we're doing *some* testing,
