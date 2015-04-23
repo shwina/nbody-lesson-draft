@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="generator" content="pandoc">
+    <title>Software Carpentry: Testing Scientific Software</title>
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-theme.css" />
+    <link rel="stylesheet" type="text/css" href="css/swc.css" />
+    <link rel="alternate" type="application/rss+xml" title="Software Carpentry Blog" href="http://software-carpentry.org/feed.xml"/>
+    <meta charset="UTF-8" />
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body class="lesson">
+    <div class="container card">
+      <div class="banner">
+        <a href="http://software-carpentry.org" title="Software Carpentry">
+          <img alt="Software Carpentry banner" src="img/software-carpentry-banner.png" />
+        </a>
+      </div>
+      <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+          <h1 class="title">Testing Scientific Software</h1>
+          <h2 class="subtitle">Growing Tests</h2>
+<p>Before we can test that our code produces the right answer, we need to know <em>what</em> the right answer is.</p>
+<p>Let's consider a much simpler system: two bodies of unit mass, separated by unit distance, and initially at rest (zero velocity):</p>
+<pre class="sourceCode python"><code class="sourceCode python"><span class="ch">from</span> nbody <span class="ch">import</span> *
+
+BODIES = {
+    <span class="st">&#39;body-1&#39;</span>: ([-<span class="fl">0.5</span>, <span class="fl">0.0</span>, <span class="fl">0.0</span>], [<span class="fl">0.0</span>, <span class="fl">0.0</span>, <span class="fl">0.0</span>], <span class="dv">1</span>),
+    <span class="co">&#39;body-2&#39;</span>: ([<span class="fl">0.5</span>, <span class="fl">0.0</span>, <span class="fl">0.0</span>], [<span class="fl">0.0</span>, <span class="fl">0.0</span>, <span class="fl">0.0</span>], <span class="dv">1</span>)
+}
+
+SYSTEM = <span class="dt">list</span>(BODIES.values())
+PAIRS = combinations(SYSTEM)</code></pre>
+<pre class="sourceCode python"><code class="sourceCode python">advance(<span class="dv">1</span>, <span class="dv">1</span>, SYSTEM, PAIRS)</code></pre>
+<p>One of the first things we need to make sure of is that the masses of the bodies haven't changed:</p>
+<pre class="sourceCode python"><code class="sourceCode python"><span class="dt">print</span> BODIES[<span class="st">&#39;body-1&#39;</span>][<span class="dv">2</span>]
+<span class="dt">print</span> BODIES[<span class="st">&#39;body-2&#39;</span>][<span class="dv">2</span>]</code></pre>
+<pre class="output"><code>1
+1</code></pre>
+<p>Gravity is an <em>attractive</em> force, i.e, it pulls bodies closer together. So the second thing that we can check is that the two bodies have moved <em>toward</em> each other, by equal amounts. Since the bodies are of equal mass, and are both initially at rest, we don't expect that one body should move more than the other. Let's look at the positions of the bodies before and after advancing the system:</p>
+<pre><code>BODIES = {
+    &#39;body-1&#39;: ([-0.5, 0.0, 0.0], [0.0, 0.0, 0.0], 1),
+    &#39;body-2&#39;: ([0.5, 0.0, 0.0], [0.0, 0.0, 0.0], 1)
+}
+
+SYSTEM = list(BODIES.values())
+PAIRS = combinations(SYSTEM)</code></pre>
+<pre class="sourceCode python"><code class="sourceCode python"><span class="dt">print</span> <span class="st">&#39;Positions before advancing: &#39;</span>
+<span class="dt">print</span> BODIES[<span class="st">&#39;body-1&#39;</span>][<span class="dv">0</span>]
+<span class="dt">print</span> BODIES[<span class="st">&#39;body-2&#39;</span>][<span class="dv">0</span>]</code></pre>
+<pre class="output"><code>[-0.5, 0.0, 0.0]
+[0.5, 0.0, 0.0]</code></pre>
+<pre class="sourceCode python"><code class="sourceCode python">advance(<span class="dv">1</span>, <span class="dv">1</span>, SYSTEM, PAIRS)</code></pre>
+<pre class="sourceCode python"><code class="sourceCode python"><span class="dt">print</span> <span class="st">&#39;Positions after advancing: &#39;</span>
+<span class="dt">print</span> BODIES[<span class="st">&#39;body-1&#39;</span>][<span class="dv">0</span>]
+<span class="dt">print</span> BODIES[<span class="st">&#39;body-2&#39;</span>][<span class="dv">0</span>]</code></pre>
+<pre class="output"><code>[-1.5, 0.0, 0.0]
+[-0.5, 0.0, 0.0]</code></pre>
+<p>That doesn't look good--- it looks like <code>body-1</code> has moved by 1 unit to the left, and <code>body-2</code> has moved by 1 unit... also to the left.</p>
+<p>What about the velocities? We expect these to behave the same; i.e., gravity should cause the bodies to acquire equal <em>and opposite</em> velocities.</p>
+<pre><code>BODIES = {
+    &#39;body-1&#39;: ([-0.5, 0.0, 0.0], [0.0, 0.0, 0.0], 1),
+    &#39;body-2&#39;: ([0.5, 0.0, 0.0], [0.0, 0.0, 0.0], 1)
+}
+
+SYSTEM = list(BODIES.values())
+PAIRS = combinations(SYSTEM)</code></pre>
+<pre class="sourceCode python"><code class="sourceCode python"><span class="dt">print</span> <span class="st">&#39;Velocities before advancing: &#39;</span>
+<span class="dt">print</span> BODIES[<span class="st">&#39;body-1&#39;</span>][<span class="dv">1</span>]
+<span class="dt">print</span> BODIES[<span class="st">&#39;body-2&#39;</span>][<span class="dv">1</span>]</code></pre>
+<pre class="output"><code>[0.0, 0.0, 0.0]
+[0.0, 0.0, 0.0]</code></pre>
+<pre class="sourceCode python"><code class="sourceCode python">advance(<span class="dv">1</span>, <span class="dv">1</span>, SYSTEM, PAIRS)</code></pre>
+<pre class="sourceCode python"><code class="sourceCode python"><span class="dt">print</span> <span class="st">&#39;Velocities after advancing: &#39;</span>
+<span class="dt">print</span> BODIES[<span class="st">&#39;body-1&#39;</span>][<span class="dv">1</span>]
+<span class="dt">print</span> BODIES[<span class="st">&#39;body-2&#39;</span>][<span class="dv">1</span>]</code></pre>
+<pre class="output"><code>[-1.0, 0.0, 0.0]
+[-1.0, 0.0, 0.0]</code></pre>
+<p>Again, the velocities <em>are</em> equal, but they have the same sign (both negative), which suggests that the bodies move in the same direction.</p>
+<p>Let's write some more tests to find out more about our code.</p>
+        </div>
+      </div>
+      <div class="footer">
+        <a class="label swc-blue-bg" href="http://software-carpentry.org">Software Carpentry</a>
+        <a class="label swc-blue-bg" href="https://github.com/swcarpentry/lesson-template">Source</a>
+        <a class="label swc-blue-bg" href="mailto:admin@software-carpentry.org">Contact</a>
+        <a class="label swc-blue-bg" href="LICENSE.html">License</a>
+      </div>
+    </div>
+    <!-- Javascript placed at the end of the document so the pages load faster -->
+    <script src="http://software-carpentry.org/v5/js/jquery-1.9.1.min.js"></script>
+    <script src="css/bootstrap/bootstrap-js/bootstrap.js"></script>
+  </body>
+</html>

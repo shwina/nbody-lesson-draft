@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="generator" content="pandoc">
+    <title>Software Carpentry: Testing Scientific Software</title>
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-theme.css" />
+    <link rel="stylesheet" type="text/css" href="css/swc.css" />
+    <link rel="alternate" type="application/rss+xml" title="Software Carpentry Blog" href="http://software-carpentry.org/feed.xml"/>
+    <meta charset="UTF-8" />
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body class="lesson">
+    <div class="container card">
+      <div class="banner">
+        <a href="http://software-carpentry.org" title="Software Carpentry">
+          <img alt="Software Carpentry banner" src="img/software-carpentry-banner.png" />
+        </a>
+      </div>
+      <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+          <h1 class="title">Testing Scientific Software</h1>
+          <h2 class="subtitle">Automating Tests</h2>
+<p>So far, we've been testing our code using <code>print</code> statements:</p>
+<pre class="sourceCode python"><code class="sourceCode python"><span class="dt">print</span> <span class="st">&#39;Positions before advancing: &#39;</span>
+<span class="dt">print</span> BODIES[<span class="st">&#39;body-1&#39;</span>][<span class="dv">0</span>]
+<span class="dt">print</span> BODIES[<span class="st">&#39;body-2&#39;</span>][<span class="dv">0</span>]</code></pre>
+<pre class="output"><code>[-0.5, 0.0, 0.0]
+[0.5, 0.0, 0.0]</code></pre>
+<pre class="sourceCode python"><code class="sourceCode python">advance(<span class="dv">1</span>, <span class="dv">1</span>, SYSTEM, PAIRS)</code></pre>
+<pre class="sourceCode python"><code class="sourceCode python"><span class="dt">print</span> <span class="st">&#39;Positions after advancing: &#39;</span>
+<span class="dt">print</span> BODIES[<span class="st">&#39;body-1&#39;</span>][<span class="dv">0</span>]
+<span class="dt">print</span> BODIES[<span class="st">&#39;body-2&#39;</span>][<span class="dv">0</span>]</code></pre>
+<pre class="output"><code>[-1.5, 0.0, 0.0]
+[-0.5, 0.0, 0.0]</code></pre>
+<p>We're also re-setting our system for every new test:</p>
+<p>BODIES = { 'body-1': ([-0.5, 0.0, 0.0], [0.0, 0.0, 0.0], 1), 'body-2': ([0.5, 0.0, 0.0], [0.0, 0.0, 0.0], 1) }</p>
+<p>SYSTEM = list(BODIES.values()) PAIRS = combinations(SYSTEM)</p>
+<p>This is a great first step--- we're doing <em>some</em> testing, which is more than a lot of programmers. But we can do better than using <code>print</code> statements. <code>print</code> needs us to visually inspect and compare output every time, and sooner or later, we're going to make mistakes and miss some subtle differences.</p>
+<p>Also, writing all these print statements is a lot of work. The more tests we write, the more typing we'll have to do each time we want to write our tests. And the more time testing takes us, the less likely we are to do it often.</p>
+<p>We need a better way to organize and run our tests, and the first (and most important) tool that we'll use for this is the <code>assert</code> statement. <code>assert</code> simply checks if something is true at a certain point in a program. When Python sees one, it evaluates the assertion's condition. If it's true, Python does nothing, but if it's false, Python halts the program immediately and prints the error message provided.</p>
+<pre class="sourceCode python"><code class="sourceCode python">mass_of_a = <span class="fl">1.0</span>
+mass_of_b = <span class="fl">1.0</span>
+<span class="kw">assert</span> mass_of_a == mass_of_b, <span class="st">&#39;Masses are not equal&#39;</span></code></pre>
+<pre class="sourceCode python"><code class="sourceCode python">mass_of_a = <span class="fl">1.0</span>
+mass_of_b = <span class="fl">2.0</span>
+<span class="kw">assert</span> mass_of_a == mass_of_b, <span class="st">&#39;Masses are not equal&#39;</span></code></pre>
+<pre class="error"><code>AssertionError                            Traceback (most recent call last)
+&lt;ipython-input-3-6787e3e4f3ef&gt; in &lt;module&gt;()
+----&gt; 1 assert mass_of_a == mass_of_b, &#39;Masses are not equal&#39;
+
+AssertionError: Masses are not equal</code></pre>
+<p>Using assertions, we can re-write our tests in a script, using assertions to check for equality, rather than printing the results, and inspecting them visually:</p>
+<pre><code># test_nbody.py
+
+from nbody import *
+
+# Initialize the system:
+BODIES = {
+    &#39;body-1&#39;: ([-0.5, 0.0, 0.0], [0.0, 0.0, 0.0], 1),
+    &#39;body-2&#39;: ([0.5, 0.0, 0.0], [0.0, 0.0, 0.0], 1)
+}
+
+SYSTEM = list(BODIES.values())
+PAIRS = combinations(SYSTEM)
+
+# Advance the system by a single time step:
+advance(1, 1, SYSTEM, PAIRS)
+
+# Check that the masses remain unchanged
+assert BODIES[&#39;body-1&#39;][1] == BODIES[&#39;body-2&#39;][1], &#39;Masses are not equal&#39;
+
+# Initialize the system:
+BODIES = {
+    &#39;body-1&#39;: ([-0.5, 0.0, 0.0], [0.0, 0.0, 0.0], 1),
+    &#39;body-2&#39;: ([0.5, 0.0, 0.0], [0.0, 0.0, 0.0], 1)
+}
+
+SYSTEM = list(BODIES.values())
+PAIRS = combinations(SYSTEM)
+
+# Advance the system by a single time step:
+advance(1, 1, SYSTEM, PAIRS)
+
+# Check that the displacements (in the x-direction)
+# are equal and opposite, and that all other displacements
+# are zero:
+assert(BODIES[&#39;body-1&#39;][0][1] == 0.0)
+assert(BODIES[&#39;body-1&#39;][0][2] == 0.0)
+assert(BODIES[&#39;body-2&#39;][0][1] == 0.0)
+assert(BODIES[&#39;body-2&#39;][0][2] == 0.0)
+assert(BODIES[&#39;body-1&#39;][0][0] == -BODIES[&#39;body-2&#39;][0][0])
+
+# Initialize the system:
+BODIES = {
+    &#39;body-1&#39;: ([-0.5, 0.0, 0.0], [0.0, 0.0, 0.0], 1),
+    &#39;body-2&#39;: ([0.5, 0.0, 0.0], [0.0, 0.0, 0.0], 1)
+}
+
+SYSTEM = list(BODIES.values())
+PAIRS = combinations(SYSTEM)
+
+# Advance the system by a single time step:
+advance(1, 1, SYSTEM, PAIRS)
+
+# Check that the velocities (in the x-direction)
+# are equal and opposite, and that all other velocities
+# are zero:
+assert(BODIES[&#39;body-1&#39;][1][1] == 0.0)
+assert(BODIES[&#39;body-1&#39;][1][2] == 0.0)
+assert(BODIES[&#39;body-2&#39;][1][1] == 0.0)
+assert(BODIES[&#39;body-2&#39;][1][2] == 0.0)
+assert(BODIES[&#39;body-1&#39;][1][0] == -BODIES[&#39;body-2&#39;][1][0])</code></pre>
+<p>Now, every time we want to run our tests, we simply do:</p>
+<pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">python</span> test_nbody.py</code></pre>
+<p>from the command line.</p>
+        </div>
+      </div>
+      <div class="footer">
+        <a class="label swc-blue-bg" href="http://software-carpentry.org">Software Carpentry</a>
+        <a class="label swc-blue-bg" href="https://github.com/swcarpentry/lesson-template">Source</a>
+        <a class="label swc-blue-bg" href="mailto:admin@software-carpentry.org">Contact</a>
+        <a class="label swc-blue-bg" href="LICENSE.html">License</a>
+      </div>
+    </div>
+    <!-- Javascript placed at the end of the document so the pages load faster -->
+    <script src="http://software-carpentry.org/v5/js/jquery-1.9.1.min.js"></script>
+    <script src="css/bootstrap/bootstrap-js/bootstrap.js"></script>
+  </body>
+</html>
