@@ -5,9 +5,6 @@ subtitle: Growing Tests
 minutes: 5
 ---
 
-Before we can test that our code produces the right answer,
-we need to know *what* the right answer is.
-
 Let's consider a much simpler system:
 two bodies of unit mass,
 separated by unit distance,

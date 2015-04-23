@@ -45,6 +45,6 @@ With well-engineered tests,
 we can be confident that our code will produce the right answer every time it is run.
 When a test fails, we can more easily
 identify the source of the error, and
-tell which parts of our code need changing.
+tell which parts of our code need fixing.
 
 #FIXME: what about testing scientific software
