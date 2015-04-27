@@ -17,7 +17,8 @@ But even this approach has a few problems:
 There is a lot of duplicate code, and that's almost *always* a bad idea.
 
 What we'd *like* to do is to have our tests all run independently,
-
+and look at which ones passed and which failed.
+Then, we can make informed decisions about what needs fixing.
 
 Fortunately, there's a way to do just this:
 
