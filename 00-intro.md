@@ -47,4 +47,3 @@ When a test fails, we can more easily
 identify the source of the error, and
 tell which parts of our code need fixing.
 
-#FIXME: what about testing scientific software
