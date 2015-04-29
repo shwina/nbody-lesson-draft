@@ -4,6 +4,9 @@ title: Testing Scientific Software
 subtitle: Building a Test Suite
 minutes: 5
 ---
+> ## Learning Objectives {.objectives}
+>
+> *   FIXME
 
 Putting our tests in a script and
 using `assert` statements instead of `print` statements

@@ -4,6 +4,9 @@ title: Testing Scientific Software
 subtitle: Growing Tests
 minutes: 5
 ---
+> ## Learning Objectives {.objectives}
+>
+> *   FIXME
 
 Let's consider a much simpler system:
 two bodies of unit mass,
