@@ -62,7 +62,7 @@ PAIRS = combinations(SYSTEM)</code></pre>
 <span class="dt">print</span> BODIES[<span class="st">&#39;body-2&#39;</span>][<span class="dv">0</span>]</code></pre>
 <pre class="output"><code>[-1.5, 0.0, 0.0]
 [-0.5, 0.0, 0.0]</code></pre>
-<p>That doesn't look good--- it looks like <code>body-1</code> has moved by 1 unit to the left, and <code>body-2</code> has moved by 1 unit... also to the left.</p>
+<p>That doesn't look good---it looks like <code>body-1</code> has moved by 1 unit to the left, and <code>body-2</code> has moved by 1 unit... also to the left.</p>
 <p>What about the velocities? We expect these to behave the same; i.e., gravity should cause the bodies to acquire equal <em>and opposite</em> velocities.</p>
 <pre><code>BODIES = {
     &#39;body-1&#39;: ([-0.5, 0.0, 0.0], [0.0, 0.0, 0.0], 1),

@@ -29,10 +29,10 @@
           <h2 class="subtitle">Building a Test Suite</h2>
 <p>Putting our tests in a script and using <code>assert</code> statements instead of <code>print</code> statements has greatly improved the quality of our tests. But even this approach has a few problems:</p>
 <ol style="list-style-type: decimal">
-<li><p>When a test fails (i.e., when an assertion's condition evaluates to 'false'), the test script stops running.</p></li>
+<li><p>When a test fails (i.e., when an assertion's condition evaluates to 'false'), the test script stops running, and we only know about the first failure. We won't know till we fix our code and run the tests again if something else is wrong.</p></li>
 <li><p>We're still re-setting the system after each test. There is a lot of duplicate code, and that's almost <em>always</em> a bad idea.</p></li>
 </ol>
-<p>What we'd <em>like</em> to do is to have our tests all run independently, and look at which ones passed and which failed. Then, we can make informed decisions about what needs fixing.</p>
+<p>What we'd <em>like</em> to do is to have our tests all run independently, and look at which ones passed and which failed. Then, we can make informed decisions about what needs fixing. We'd also like a way to automatically reset the system after each test.</p>
 <p>Fortunately, there's a way to do just this:</p>
 <h1 id="fixme-organize-tests-into-a-test-suite">FIXME: organize tests into a test suite</h1>
         </div>

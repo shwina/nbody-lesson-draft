@@ -87,8 +87,7 @@ print BODIES['body-2'][0]
 [-0.5, 0.0, 0.0]
 ~~~
 
-That doesn't look good---
-it looks like `body-1` has moved by 1 unit to the left,
+That doesn't look good---it looks like `body-1` has moved by 1 unit to the left,
 and `body-2` has moved by 1 unit... also to the left.
 
 What about the velocities?
