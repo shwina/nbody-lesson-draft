@@ -4,6 +4,9 @@ title: Testing Scientific Software
 subtitle: Automating Tests
 minutes: 5
 ---
+> ## Learning Objectives {.objectives}
+>
+> *   FIXME
 
 So far, we've been testing our code using
 `print` statements:

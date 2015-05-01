@@ -11,11 +11,11 @@ Paragraph of introductory material.
 
 ## Topics
 
-1. [Introduction](00-intro.html)
-2. [Background](01-background.html)
-3. [Growing Tests](02-growing-tests.html)
-4. [Automating Tests](03-automating.html)
-4. [Building a Test Suite](04-test-suite.html)
+0.  [Introduction](00-intro.html)
+1.  [The N-Body Problem](01-background.html)
+2.  [Growing Tests](02-growing-tests.html)
+3.  [Automating Tests](03-automating.html)
+4.  [Building a Test Suite](04-test-suite.html)
 
 ## Other Resources
 
