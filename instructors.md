@@ -5,26 +5,28 @@ subtitle: Instructor's Guide
 ---
 ## Legend
 
-One or more paragraphs laying out the lesson's legend (i.e., the story
-behind its running example).
+FIXME
 
 ## Overall
 
-*   Something insightful.
+FIXME
 
-*   Some hard-won experience.
+## [Motivation](00-intro.html)
 
-## [Topic Title One](01-one.html)
+FIXME
 
-*   A specific tip or trick about the first topic.
+## [The N-Body Problem](01-background.html)
 
-*   Be sure to describe what learners are expected to do during the topic
-    (watch, type along, pair program, etc.)
+FIXME
 
-1.  Discussion of first challenge.
+## [Growing Tests](02-growing-tests.html)
 
-2.  Discussion of second challenge.
+FIXME
 
-## [Topic Title Two](02-two.html)
+## [Automating Tests](03-automating.html)
 
-*   Et cetera.
+FIXME
+
+## [Building a Test Suite](04-test-suite.html)
+
+FIXME
