@@ -23,11 +23,22 @@
           <img alt="Software Carpentry banner" src="img/software-carpentry-banner.png" />
         </a>
       </div>
+      <article>
       <div class="row">
         <div class="col-md-10 col-md-offset-1">
           <h1 class="title">Testing Scientific Software</h1>
           <h2 class="subtitle">Automating Tests</h2>
-<p>So far, we've been testing our code using <code>print</code> statements:</p>
+<div id="learning-objectives" class="objectives panel panel-warning">
+<div class="panel-heading">
+<h2><span class="glyphicon glyphicon-certificate"></span>Learning Objectives</h2>
+</div>
+<div class="panel-body">
+<ul>
+<li>Learn about assertions, and how they can improve our tests</li>
+</ul>
+</div>
+</div>
+<p>So far, we’ve been testing our code using <code>print</code> statements:</p>
 <pre class="sourceCode python"><code class="sourceCode python"><span class="dt">print</span> <span class="st">&#39;Positions before advancing: &#39;</span>
 <span class="dt">print</span> BODIES[<span class="st">&#39;body-1&#39;</span>][<span class="dv">0</span>]
 <span class="dt">print</span> BODIES[<span class="st">&#39;body-2&#39;</span>][<span class="dv">0</span>]</code></pre>
@@ -39,7 +50,7 @@
 <span class="dt">print</span> BODIES[<span class="st">&#39;body-2&#39;</span>][<span class="dv">0</span>]</code></pre>
 <pre class="output"><code>[-1.5, 0.0, 0.0]
 [-0.5, 0.0, 0.0]</code></pre>
-<p>We're also re-setting our system for every new test:</p>
+<p>We’re also re-setting our system for every new test:</p>
 <pre class="sourceCode python"><code class="sourceCode python">BODIES = {
     <span class="st">&#39;body-1&#39;</span>: ([-<span class="fl">0.5</span>, <span class="fl">0.0</span>, <span class="fl">0.0</span>], [<span class="fl">0.0</span>, <span class="fl">0.0</span>, <span class="fl">0.0</span>], <span class="dv">1</span>),
     <span class="co">&#39;body-2&#39;</span>: ([<span class="fl">0.5</span>, <span class="fl">0.0</span>, <span class="fl">0.0</span>], [<span class="fl">0.0</span>, <span class="fl">0.0</span>, <span class="fl">0.0</span>], <span class="dv">1</span>)
@@ -47,9 +58,9 @@
 
 SYSTEM = <span class="dt">list</span>(BODIES.values())
 PAIRS = combinations(SYSTEM)</code></pre>
-<p>This is a great first step--- we're doing <em>some</em> testing, which is more than a lot of programmers. But we can do better than using <code>print</code> statements. <code>print</code> needs us to visually inspect and compare output every time, and sooner or later, we're going to make mistakes and miss some subtle differences.</p>
-<p>Also, writing all these print statements is a lot of work. The more tests we write, the more typing we'll have to do each time we want to write our tests. And the more time testing takes us, the less likely we are to do it often.</p>
-<p>We need a better way to organize and run our tests, and the first (and most important) tool that we'll use for this is the <code>assert</code> statement. <code>assert</code> simply checks if something is true at a certain point in a program. When Python sees one, it evaluates the assertion's condition. If it's true, Python does nothing, but if it's false, Python halts the program immediately and prints the error message provided.</p>
+<p>This is a great first step— we’re doing <em>some</em> testing, which is more than a lot of programmers. But we can do better than using <code>print</code> statements. <code>print</code> needs us to visually inspect and compare output every time, and sooner or later, we’re going to make mistakes and miss some subtle differences.</p>
+<p>Also, writing all these print statements is a lot of work. The more tests we write, the more typing we’ll have to do each time we want to write our tests. And the more time testing takes us, the less likely we are to do it often.</p>
+<p>We need a better way to organize and run our tests, and the first (and most important) tool that we’ll use for this is the <code>assert</code> statement. <code>assert</code> simply checks if something is true at a certain point in a program. When Python sees one, it evaluates the assertion’s condition. If it’s true, Python does nothing, but if it’s false, Python halts the program immediately and prints the error message provided.</p>
 <pre class="sourceCode python"><code class="sourceCode python">mass_of_a = <span class="fl">1.0</span>
 mass_of_b = <span class="fl">1.0</span>
 <span class="kw">assert</span> mass_of_a == mass_of_b, <span class="st">&#39;Masses are not equal&#39;</span></code></pre>
@@ -127,6 +138,7 @@ assert BODIES[&#39;body-1&#39;][1][0] == -BODIES[&#39;body-2&#39;][1][0]</code><
 <p>from the command line.</p>
         </div>
       </div>
+      </article>
       <div class="footer">
         <a class="label swc-blue-bg" href="http://software-carpentry.org">Software Carpentry</a>
         <a class="label swc-blue-bg" href="https://github.com/swcarpentry/lesson-template">Source</a>
