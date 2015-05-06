@@ -6,7 +6,7 @@ minutes: 5
 ---
 > ## Learning Objectives {.objectives}
 >
-> *   FIXME
+> * Learn about assertions, and how they can improve our tests
 
 So far, we've been testing our code using
 `print` statements:

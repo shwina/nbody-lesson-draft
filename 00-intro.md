@@ -1,7 +1,7 @@
 ---
 layout: page
 title: Testing Scientific Software
-subtitle: Motivation
+subtitle: Introduction
 minutes: 5
 ---
 > ## Learning Objectives {.objectives}
@@ -19,11 +19,12 @@ the motion of the outer planets (Jupiter, Saturn, Uranus and Neptune)
 around the Sun. Here is the output from our script:
 #FIXME: make this GIF prettier
 #FIXME: explain exactly what the GIF is showing
-![this is the image's title](fig/planets_broken.gif "this is the image's alt text")
+![Output from visualization script](fig/planets_broken.gif "this is the image's alt text")
 
 It's tempting to be satisfied with this animation. After all,
 our code seems to be working (no errors),
-and producing reasonable results - the planets *do* look like they're orbiting the sun...
+and producing reasonable results -
+the planets *do* look like they're orbiting the sun...
 But, some investigation will reveal that there's a problem -
 for instance, it is known that
 the planets of the Solar System orbit the Sun in nearly the same plane,
@@ -46,4 +47,3 @@ we can be confident that our code will produce the right answer every time it is
 When a test fails, we can more easily
 identify the source of the error, and
 tell which parts of our code need fixing.
-

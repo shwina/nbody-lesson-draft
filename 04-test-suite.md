@@ -6,7 +6,7 @@ minutes: 5
 ---
 > ## Learning Objectives {.objectives}
 >
-> *   FIXME
+> * FIXME
 
 Putting our tests in a script and
 using `assert` statements instead of `print` statements

@@ -23,11 +23,23 @@
           <img alt="Software Carpentry banner" src="img/software-carpentry-banner.png" />
         </a>
       </div>
+      <article>
       <div class="row">
         <div class="col-md-10 col-md-offset-1">
           <h1 class="title">Testing Scientific Software</h1>
           <h2 class="subtitle">Growing Tests</h2>
-<p>Let's consider a much simpler system: two bodies of unit mass, separated by unit distance, and initially at rest (zero velocity):</p>
+<div id="learning-objectives" class="objectives panel panel-warning">
+<div class="panel-heading">
+<h2><span class="glyphicon glyphicon-certificate"></span>Learning Objectives</h2>
+</div>
+<div class="panel-body">
+<ul>
+<li>Learn different strategies to test code</li>
+<li>Identify bugs in our code by writing tests for it</li>
+</ul>
+</div>
+</div>
+<p>Let’s consider a much simpler system: two bodies of unit mass, separated by unit distance, and initially at rest (zero velocity):</p>
 <pre class="sourceCode python"><code class="sourceCode python"><span class="ch">from</span> nbody <span class="ch">import</span> *
 
 BODIES = {
@@ -38,12 +50,12 @@ BODIES = {
 SYSTEM = <span class="dt">list</span>(BODIES.values())
 PAIRS = combinations(SYSTEM)</code></pre>
 <pre class="sourceCode python"><code class="sourceCode python">advance(<span class="dv">1</span>, <span class="dv">1</span>, SYSTEM, PAIRS)</code></pre>
-<p>One of the first things we need to make sure of is that the masses of the bodies haven't changed:</p>
+<p>One of the first things we need to make sure of is that the masses of the bodies haven’t changed:</p>
 <pre class="sourceCode python"><code class="sourceCode python"><span class="dt">print</span> BODIES[<span class="st">&#39;body-1&#39;</span>][<span class="dv">2</span>]
 <span class="dt">print</span> BODIES[<span class="st">&#39;body-2&#39;</span>][<span class="dv">2</span>]</code></pre>
 <pre class="output"><code>1
 1</code></pre>
-<p>Gravity is an <em>attractive</em> force, i.e, it pulls bodies closer together. So the second thing that we can check is that the two bodies have moved <em>toward</em> each other, by equal amounts. Since the bodies are of equal mass, and are both initially at rest, we don't expect that one body should move more than the other. Let's look at the positions of the bodies before and after advancing the system:</p>
+<p>Gravity is an <em>attractive</em> force, i.e, it pulls bodies closer together. So the second thing that we can check is that the two bodies have moved <em>toward</em> each other, by equal amounts. Since the bodies are of equal mass, and are both initially at rest, we don’t expect that one body should move more than the other. Let’s look at the positions of the bodies before and after advancing the system:</p>
 <pre><code>BODIES = {
     &#39;body-1&#39;: ([-0.5, 0.0, 0.0], [0.0, 0.0, 0.0], 1),
     &#39;body-2&#39;: ([0.5, 0.0, 0.0], [0.0, 0.0, 0.0], 1)
@@ -62,7 +74,7 @@ PAIRS = combinations(SYSTEM)</code></pre>
 <span class="dt">print</span> BODIES[<span class="st">&#39;body-2&#39;</span>][<span class="dv">0</span>]</code></pre>
 <pre class="output"><code>[-1.5, 0.0, 0.0]
 [-0.5, 0.0, 0.0]</code></pre>
-<p>That doesn't look good---it looks like <code>body-1</code> has moved by 1 unit to the left, and <code>body-2</code> has moved by 1 unit... also to the left.</p>
+<p>That doesn’t look good—it looks like <code>body-1</code> has moved by 1 unit to the left, and <code>body-2</code> has moved by 1 unit… also to the left.</p>
 <p>What about the velocities? We expect these to behave the same; i.e., gravity should cause the bodies to acquire equal <em>and opposite</em> velocities.</p>
 <pre><code>BODIES = {
     &#39;body-1&#39;: ([-0.5, 0.0, 0.0], [0.0, 0.0, 0.0], 1),
@@ -83,9 +95,10 @@ PAIRS = combinations(SYSTEM)</code></pre>
 <pre class="output"><code>[-1.0, 0.0, 0.0]
 [-1.0, 0.0, 0.0]</code></pre>
 <p>Again, the velocities <em>are</em> equal, but they have the same sign (both negative), which suggests that the bodies move in the same direction.</p>
-<p>Let's write some more tests to find out more about our code.</p>
+<p>Let’s write some more tests to find out more about our code.</p>
         </div>
       </div>
+      </article>
       <div class="footer">
         <a class="label swc-blue-bg" href="http://software-carpentry.org">Software Carpentry</a>
         <a class="label swc-blue-bg" href="https://github.com/swcarpentry/lesson-template">Source</a>

@@ -6,7 +6,8 @@ minutes: 5
 ---
 > ## Learning Objectives {.objectives}
 >
-> *   FIXME
+> * Learn different strategies to test code
+> * Identify bugs in our code by writing tests for it
 
 Let's consider a much simpler system:
 two bodies of unit mass,
