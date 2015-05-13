@@ -141,3 +141,61 @@ which suggests that the bodies move
 in the same direction.
 
 Let's write some more tests to find out more about our code.
+
+Note that only the separation between bodies is meant to matter.
+So if we arbitrarily translate all coordinates by some amount
+whilst leaving the velocities untouched,
+and reverse this after evolution, the result should be identical.
+
+~~~{.python}
+# shift by 1, 2 and 3 units in
+# each co-ordinate direction respectively.
+
+BODIES = {
+    'body-1': ([-0.5, 0.0, 0.0], [0.0, 0.0, 0.0], 1),
+    'body-2': ([0.5, 0.0, 0.0], [0.0, 0.0, 0.0], 1)
+}
+
+SYSTEM = list(BODIES.values())
+PAIRS = combinations(SYSTEM)
+
+advance(1, 1, SYSTEM, PAIRS)
+
+print 'Velocities before shifting: '
+print BODIES['body-1'][1]
+print BODIES['body-2'][1]
+
+BODIES = {
+    'body-1': ([-0.5, 0.0, 0.0], [0.0, 0.0, 0.0], 1),
+    'body-2': ([0.5, 0.0, 0.0], [0.0, 0.0, 0.0], 1)
+}
+
+SYSTEM = list(BODIES.values())
+PAIRS = combinations(SYSTEM)
+
+shift = np.array([1, 2, 1])
+for i in range(len(SYSTEM)):
+    for n in range(3):
+        SYSTEM[i][0][n] += shift[n]
+
+advance(1, 1, SYSTEM, PAIRS)
+
+print 'Velocities after shifting: '
+print BODIES['body-1'][1]
+print BODIES['body-2'][1]
+~~~
+
+~~~{.output}
+Velocities before shifting:
+[-1.0, 0.0, 0.0]
+[-1.0, 0.0, 0.0]
+
+Velocities after shifting:
+[-1.0, 0.0, 0.0]
+[-1.0, 0.0, 0.0]
+~~~
+
+Although our velocities are wrong,
+shifting, or *translating* our system
+doesn't change how our code behaves,
+which is a good sign.
