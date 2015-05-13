@@ -173,7 +173,7 @@ BODIES = {
 SYSTEM = list(BODIES.values())
 PAIRS = combinations(SYSTEM)
 
-shift = np.array([1, 2, 1])
+shift = np.array([1, 2, 3])
 for i in range(len(SYSTEM)):
     for n in range(3):
         SYSTEM[i][0][n] += shift[n]
