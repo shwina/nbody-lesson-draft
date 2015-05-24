@@ -6,7 +6,7 @@
 # modified by Maciej Fijalkowski
 # 2to3
 
-def advance(dt, n, bodies, pairs):
+def compute_interactions(dt, n, pairs):
 
     for i in range(n):
         for (([x1, y1, z1], v1, m1),
@@ -23,10 +23,13 @@ def advance(dt, n, bodies, pairs):
             v2[0] += dx * b1m
             v2[1] += dy * b1m
             v2[2] += dz * b1m
-        for (r, [vx, vy, vz], m) in bodies:
-            r[0] += dt * vx
-            r[1] += dt * vy
-            r[2] += dt * vz
+
+def advance(dt, bodies):
+
+    for (r, [vx, vy, vz], m) in bodies:
+        r[0] += dt * vx
+        r[1] += dt * vy
+        r[2] += dt * vz
 
 def combinations(l):
     result = []

@@ -10,7 +10,8 @@ SYSTEM = list(BODIES.values())
 PAIRS = combinations(SYSTEM)
 
 # Advance the system by a single time step:
-advance(1, 1, SYSTEM, PAIRS)
+compute_interactions(1, 1, PAIRS)
+advance(1, SYSTEM)
 
 # Check that the masses remain unchanged
 assert BODIES['body-1'][2] == BODIES['body-2'][2], 'Masses are not equal'
@@ -25,7 +26,8 @@ SYSTEM = list(BODIES.values())
 PAIRS = combinations(SYSTEM)
 
 # Advance the system by a single time step:
-advance(1, 1, SYSTEM, PAIRS)
+compute_interactions(1, 1, PAIRS)
+advance(1, SYSTEM)
 
 # Check that the displacements (in the x-direction)
 # are equal and opposite, and that all other displacements
@@ -46,7 +48,8 @@ SYSTEM = list(BODIES.values())
 PAIRS = combinations(SYSTEM)
 
 # Advance the system by a single time step:
-advance(1, 1, SYSTEM, PAIRS)
+compute_interactions(1, 1, PAIRS)
+advance(1, SYSTEM)
 
 # Check that the velocities (in the x-direction)
 # are equal and opposite, and that all other velocities
