@@ -13,7 +13,7 @@ PAIRS = combinations(SYSTEM)
 advance(1, 1, SYSTEM, PAIRS)
 
 # Check that the masses remain unchanged
-assert BODIES['body-1'][1] == BODIES['body-2'][1], 'Masses are not equal'
+assert BODIES['body-1'][2] == BODIES['body-2'][2], 'Masses are not equal'
 
 # Initialize the system:
 BODIES = {
