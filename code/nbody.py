@@ -1,37 +1,63 @@
-# The Computer Language Benchmarks Game
-# http://benchmarksgame.alioth.debian.org/
-#
-# originally by Kevin Carson
-# modified by Tupteq, Fredrik Johansson, and Daniel Nanz
-# modified by Maciej Fijalkowski
-# 2to3
+# -*- coding: utf-8 -*-
+"""
+Created on Sat May 16 12:19:34 2015
+@author: Ian Hawke, Ashwin Srinath
+"""
 
-def advance(dt, n, bodies, pairs):
+import numpy
 
-    for i in range(n):
-        for (([x1, y1, z1], v1, m1),
-             ([x2, y2, z2], v2, m2)) in pairs:
-            dx = x1 - x2
-            dy = y1 - y2
-            dz = z1 - z2
-            mag = dt * ((dx * dx + dy * dy + dz * dz) ** (-0.5))
-            b1m = m1 * mag
-            b2m = m2 * mag
-            v1[0] += dx * b2m
-            v1[1] += dy * b2m
-            v1[2] += dz * b2m
-            v2[0] += dx * b1m
-            v2[1] += dy * b1m
-            v2[2] += dz * b1m
-        for (r, [vx, vy, vz], m) in bodies:
-            r[0] += dt * vx
-            r[1] += dt * vy
-            r[2] += dt * vz
+def dqdt(r, v, m):
+    """
+    Compute the derivatives of velocity and position.
 
-def combinations(l):
-    result = []
-    for x in range(len(l) - 1):
-        ls = l[x+1:]
-        for y in ls:
-            result.append((l[x],y))
-    return result
+    Parameters
+    ----------
+
+    r : list of float
+        Positions (3 N)
+    v : list of float
+        Velocities (3 N)
+    m : list of float
+        Masses (N)
+
+    Returns
+    -------
+
+    drdt : list of float
+        Derivative of positions (3 N)
+    dvdt : list of float
+        Derivative of velocities (3 N)
+    """
+
+    N = len(m)
+    drdt = numpy.zeros_like(r)
+    dvdt = numpy.zeros_like(v)
+    dr = numpy.zeros((3,))
+    for i in range(N):
+        for k in range(3):
+            drdt[i][k] = v[i][k]
+        for j in range(i):
+            for k in range(3):
+                dr[k] = r[i][k] - r[j][k]
+            mag = (dr[0]**2 + dr[1]**2 + dr[2]**2)**(-1.5)
+            for k in range(3):
+                dvdt[i][k] -= mag * m[j] * dr[k]
+                dvdt[j][k] += mag * m[i] * dr[k]
+    return drdt, dvdt
+
+def advance(bodies, dt, n):
+    """
+    Step forward as in the original N-body code.
+    """
+
+    r = numpy.array(bodies[0])
+    v = numpy.array(bodies[1])
+    m = numpy.array(bodies[2])
+    for step in range(n):
+        drdt, dvdt = dqdt(r, v, m)
+        r += dt * drdt
+        v += dt * dvdt
+
+    bodies[0] = list(r)
+    bodies[1] = list(v)
+    bodies[2] = list(m)
