@@ -1,61 +1,53 @@
 from nbody import *
 
 # Initialize the system:
-BODIES = {
-    'body-1': ([-0.5, 0.0, 0.0], [0.0, 0.0, 0.0], 1),
-    'body-2': ([0.5, 0.0, 0.0], [0.0, 0.0, 0.0], 1)
-}
 
-SYSTEM = list(BODIES.values())
-PAIRS = combinations(SYSTEM)
+POSITIONS = ([-0.5, 0.0, 0.0],  [0.5, 0.0, 0.0])
+VELOCITIES = ([0.0, 0.0, 0.0], [0.0, 0.0, 0.0])
+MASSES = (1.0, 1.0)
+
+BODIES = [POSITIONS, VELOCITIES, MASSES]
 
 # Advance the system by a single time step:
-compute_interactions(1, 1, PAIRS)
-advance(1, SYSTEM)
+advance(BODIES, 1, 1)
 
 # Check that the masses remain unchanged
-assert BODIES['body-1'][2] == BODIES['body-2'][2], 'Masses are not equal'
+assert BODIES[2][0] == BODIES[2][1]
 
 # Initialize the system:
-BODIES = {
-    'body-1': ([-0.5, 0.0, 0.0], [0.0, 0.0, 0.0], 1),
-    'body-2': ([0.5, 0.0, 0.0], [0.0, 0.0, 0.0], 1)
-}
+POSITIONS = ([-0.5, 0.0, 0.0],  [0.5, 0.0, 0.0])
+VELOCITIES = ([0.0, 0.0, 0.0], [0.0, 0.0, 0.0])
+MASSES = (1.0, 1.0)
 
-SYSTEM = list(BODIES.values())
-PAIRS = combinations(SYSTEM)
+BODIES = [POSITIONS, VELOCITIES, MASSES]
 
 # Advance the system by a single time step:
-compute_interactions(1, 1, PAIRS)
-advance(1, SYSTEM)
+advance(BODIES, 1, 1)
 
 # Check that the displacements (in the x-direction)
 # are equal and opposite, and that all other displacements
 # are zero:
-assert(BODIES['body-1'][0][1] == 0.0)
-assert(BODIES['body-1'][0][2] == 0.0)
-assert(BODIES['body-2'][0][1] == 0.0)
-assert(BODIES['body-2'][0][2] == 0.0)
-assert(BODIES['body-1'][0][0] == -BODIES['body-2'][0][0])
+assert(BODIES[1][0][1] == 0.0)
+assert(BODIES[1][0][2] == 0.0)
+assert(BODIES[1][1][1] == 0.0)
+assert(BODIES[1][1][2] == 0.0)
+assert(BODIES[1][0][0] == -BODIES[1][1][0])
 
 # Initialize the system:
-BODIES = {
-    'body-1': ([-0.5, 0.0, 0.0], [0.0, 0.0, 0.0], 1),
-    'body-2': ([0.5, 0.0, 0.0], [0.0, 0.0, 0.0], 1)
-}
+POSITIONS = ([-0.5, 0.0, 0.0],  [0.5, 0.0, 0.0])
+VELOCITIES = ([0.0, 0.0, 0.0], [0.0, 0.0, 0.0])
+MASSES = (1.0, 1.0)
 
-SYSTEM = list(BODIES.values())
-PAIRS = combinations(SYSTEM)
+BODIES = [POSITIONS, VELOCITIES, MASSES]
 
 # Advance the system by a single time step:
-compute_interactions(1, 1, PAIRS)
-advance(1, SYSTEM)
+advance(BODIES, 1, 1)
 
 # Check that the velocities (in the x-direction)
 # are equal and opposite, and that all other velocities
 # are zero:
-assert(BODIES['body-1'][1][1] == 0.0)
-assert(BODIES['body-1'][1][2] == 0.0)
-assert(BODIES['body-2'][1][1] == 0.0)
-assert(BODIES['body-2'][1][2] == 0.0)
-assert(BODIES['body-1'][1][0] == -BODIES['body-2'][1][0])
+assert(BODIES[0][0][1] == 0.0)
+assert(BODIES[0][0][2] == 0.0)
+assert(BODIES[0][1][1] == 0.0)
+assert(BODIES[0][1][2] == 0.0)
+assert(BODIES[0][0][0] == -BODIES[0][1][0])
