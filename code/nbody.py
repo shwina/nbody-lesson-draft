@@ -59,7 +59,7 @@ def dqdt(r, v, m):
         for j in range(i):
             for k in range(3):
                 dr[k] = r[i][k] - r[j][k]
-            mag = (dr[0]**2 + dr[1]**2 + dr[2]**2)**(1.5)
+            mag = (dr[0]**2 + dr[1]**2 + dr[2]**2)**(-0.5)
             for k in range(3):
                 dvdt[i][k] += mag * m[j] * dr[k]
                 dvdt[j][k] += mag * m[i] * dr[k]
