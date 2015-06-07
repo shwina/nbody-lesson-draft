@@ -4,6 +4,26 @@ Created on Sat May 16 12:19:34 2015
 @author: Ian Hawke, Ashwin Srinath
 """
 
+# This bug is injected with the following bugs:
+#
+# 1. In `dqdt`
+#
+#   mag = (dr[0]**2 + dr[1]**2 + dr[2]**2)**(-1.5)
+#
+# is replaced by
+#
+#   mag = (dr[0]**2 + dr[1]**2 + dr[2]**2)**(-0.5)
+#
+#
+# 2. In `dqdt`
+#   dvdt[i][k] -= mag * m[j] * dr[k]
+#   dvdt[j][k] += mag * m[i] * dr[k]
+#
+# is replaced by:
+#   dvdt[i][k] += mag * m[j] * dr[k]
+#   dvdt[j][k] += mag * m[i] * dr[k]
+
+
 import numpy
 
 def dqdt(r, v, m):
@@ -39,9 +59,9 @@ def dqdt(r, v, m):
         for j in range(i):
             for k in range(3):
                 dr[k] = r[i][k] - r[j][k]
-            mag = (dr[0]**2 + dr[1]**2 + dr[2]**2)**(-1.5)
+            mag = (dr[0]**2 + dr[1]**2 + dr[2]**2)**(1.5)
             for k in range(3):
-                dvdt[i][k] -= mag * m[j] * dr[k]
+                dvdt[i][k] += mag * m[j] * dr[k]
                 dvdt[j][k] += mag * m[i] * dr[k]
     return drdt, dvdt
 
