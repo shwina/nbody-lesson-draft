@@ -7,15 +7,6 @@ Created on Sat May 16 12:19:34 2015
 # This bug is injected with the following bugs:
 #
 # 1. In `dqdt`
-#
-#   mag = (dr[0]**2 + dr[1]**2 + dr[2]**2)**(-1.5)
-#
-# is replaced by
-#
-#   mag = (dr[0]**2 + dr[1]**2 + dr[2]**2)**(-0.5)
-#
-#
-# 2. In `dqdt`
 #   dvdt[i][k] -= mag * m[j] * dr[k]
 #   dvdt[j][k] += mag * m[i] * dr[k]
 #

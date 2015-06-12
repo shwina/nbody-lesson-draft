@@ -17,30 +17,26 @@ and initially at rest (zero velocity):
 ~~~{.python}
 from nbody import *
 
-BODIES = {
-    'body-1': ([-0.5, 0.0, 0.0], [0.0, 0.0, 0.0], 1),
-    'body-2': ([0.5, 0.0, 0.0], [0.0, 0.0, 0.0], 1)
+POSITIONS = ([-0.5, 0.0, 0.0], [0.5, 0.0, 0.0])
+VELOCITIES = ([0.0, 0.0, 0.0], [0.0, 0.0, 0.0])
+MASSES = (1.0, 1.0)
+
+BODIES = [POSITIONS, VELOCITIES, MASSES]
+
+advance(BODIES, 1, 1)
 }
-
-SYSTEM = list(BODIES.values())
-PAIRS = combinations(SYSTEM)
-~~~
-
-~~~{.python}
-advance(1, 1, SYSTEM, PAIRS)
-~~~
 
 One of the first things we need to make sure of is
 that the masses of the bodies haven't changed:
 
 ~~~{.python}
-print BODIES['body-1'][2]
-print BODIES['body-2'][2]
+print BODIES[2][0]
+print BODIES[2][1]
 ~~~
 
 ~~~{.output}
-1
-1
+1.0
+1.0
 ~~~
 
 Gravity is an *attractive* force, i.e,
@@ -56,43 +52,42 @@ Let's look at the positions of the
 bodies before and after advancing the system:
 
 ~~~
-BODIES = {
-    'body-1': ([-0.5, 0.0, 0.0], [0.0, 0.0, 0.0], 1),
-    'body-2': ([0.5, 0.0, 0.0], [0.0, 0.0, 0.0], 1)
-}
-
-SYSTEM = list(BODIES.values())
-PAIRS = combinations(SYSTEM)
+POSITIONS = ([-0.5, 0.0, 0.0], [0.5, 0.0, 0.0])
+VELOCITIES = ([0.0, 0.0, 0.0], [0.0, 0.0, 0.0])
+MASSES = (1.0, 1.0)
+BODIES = [POSITIONS, VELOCITIES, MASSES]
 ~~~
 
 ~~~{.python}
-print 'Positions before advancing: '
-print BODIES['body-1'][0]
-print BODIES['body-2'][0]
+print 'Positions before advancing:'
+print BODIES[0][0]
+print BODIES[0][1]
 ~~~
 
 ~~~{.output}
+Positions before advancing:
 [-0.5, 0.0, 0.0]
 [0.5, 0.0, 0.0]
 ~~~
 
 ~~~{.python}
-advance(1, 1, SYSTEM, PAIRS)
+advance(BODIES, 1, 2)
 ~~~
 
 ~~~{.python}
-print 'Positions after advancing: '
-print BODIES['body-1'][0]
-print BODIES['body-2'][0]
+print 'Positions after advancing:'
+print BODIES[0][0]
+print BODIES[0][1]
 ~~~
 
 ~~~{.output}
-[-1.5, 0.0, 0.0]
-[-0.5, 0.0, 0.0]
+Positions after advancing:
+[0.5, 0.0, 0.0]
+[1.5, 0.0, 0.0]
 ~~~
 
-That doesn't look good---it looks like `body-1` has moved by 1 unit to the left,
-and `body-2` has moved by 1 unit... also to the left.
+That doesn't look good---it looks like body 1 has moved by 1 unit to the right,
+and body 2 has moved by 1 unit... also to the right.
 
 What about the velocities?
 We expect these to behave the same; i.e.,
@@ -100,102 +95,92 @@ gravity should cause the bodies to acquire
 equal *and opposite*  velocities.
 
 ~~~
-BODIES = {
-    'body-1': ([-0.5, 0.0, 0.0], [0.0, 0.0, 0.0], 1),
-    'body-2': ([0.5, 0.0, 0.0], [0.0, 0.0, 0.0], 1)
-}
+POSITIONS = ([-0.5, 0.0, 0.0], [0.5, 0.0, 0.0])
+VELOCITIES = ([0.0, 0.0, 0.0], [0.0, 0.0, 0.0])
+MASSES = (1.0, 1.0)
+BODIES = [POSITIONS, VELOCITIES, MASSES]
 
-SYSTEM = list(BODIES.values())
-PAIRS = combinations(SYSTEM)
 ~~~
 
 ~~~{.python}
-print 'Velocities before advancing: '
-print BODIES['body-1'][1]
-print BODIES['body-2'][1]
+print 'Velocities before advancing:'
+print BODIES[1][0]
+print BODIES[1][1]
 ~~~
 
 ~~~{.output}
+Velocities before advancing:
 [0.0, 0.0, 0.0]
 [0.0, 0.0, 0.0]
 ~~~
 
 ~~~{.python}
-advance(1, 1, SYSTEM, PAIRS)
+advance(BODIES, 1, 1)
 ~~~
 
 ~~~{.python}
-print 'Velocities after advancing: '
-print BODIES['body-1'][1]
-print BODIES['body-2'][1]
+print 'Velocities before advancing:'
+print BODIES[1][0]
+print BODIES[1][1]
 ~~~
 
 ~~~{.output}
-[-1.0, 0.0, 0.0]
-[-1.0, 0.0, 0.0]
+[2.0, 0.0, 0.0]
+[2.0, 0.0, 0.0]
 ~~~
 
 Again, the velocities *are* equal,
-but they have the same sign (both negative),
+but they have the same sign (both positive),
 which suggests that the bodies move
-in the same direction.
+in the same direction (the right).
 
 Let's write some more tests to find out more about our code.
 
 Note that only the separation between bodies is meant to matter.
-So if we arbitrarily translate all coordinates by some amount
-whilst leaving the velocities untouched,
-and reverse this after evolution, the result should be identical.
+So if we arbitrarily translate all coordinates by some amount,
+and advance the system by the same amount,
+the velocities acquired should be the same.
 
 ~~~{.python}
-# shift by 1, 2 and 3 units in
+POSITIONS = ([-0.5, 0.0, 0.0], [0.5, 0.0, 0.0])
+VELOCITIES = ([0.0, 0.0, 0.0], [0.0, 0.0, 0.0])
+MASSES = (1.0, 1.0)
+BODIES = [POSITIONS, VELOCITIES, MASSES]
+
+advance(BODIES, 1, 2)
+print BODIES[1][0]
+print BODIES[1][1]
+
+# now do the same, but
+# shift positions by 1, 2 and 3 units in
 # each co-ordinate direction respectively.
 
-BODIES = {
-    'body-1': ([-0.5, 0.0, 0.0], [0.0, 0.0, 0.0], 1),
-    'body-2': ([0.5, 0.0, 0.0], [0.0, 0.0, 0.0], 1)
-}
+POSITIONS = ([-0.5, 0.0, 0.0], [0.5, 0.0, 0.0])
+VELOCITIES = ([0.0, 0.0, 0.0], [0.0, 0.0, 0.0])
+MASSES = (1.0, 1.0)
+BODIES = [POSITIONS, VELOCITIES, MASSES]
 
-SYSTEM = list(BODIES.values())
-PAIRS = combinations(SYSTEM)
-
-advance(1, 1, SYSTEM, PAIRS)
-
-print 'Velocities before shifting: '
-print BODIES['body-1'][1]
-print BODIES['body-2'][1]
-
-BODIES = {
-    'body-1': ([-0.5, 0.0, 0.0], [0.0, 0.0, 0.0], 1),
-    'body-2': ([0.5, 0.0, 0.0], [0.0, 0.0, 0.0], 1)
-}
-
-SYSTEM = list(BODIES.values())
-PAIRS = combinations(SYSTEM)
-
+N = len(BODIES[2])
 shift = np.array([1, 2, 3])
-for i in range(len(SYSTEM)):
+for i in range(N):
     for n in range(3):
-        SYSTEM[i][0][n] += shift[n]
+        BODIES[0][i][n] += shift[n]
 
-advance(1, 1, SYSTEM, PAIRS)
+advance(BODIES, 1, 2)
 
 print 'Velocities after shifting: '
-print BODIES['body-1'][1]
-print BODIES['body-2'][1]
+print BODIES[1][0]
+print BODIES[1][1]
 ~~~
 
 ~~~{.output}
-Velocities before shifting:
-[-1.0, 0.0, 0.0]
-[-1.0, 0.0, 0.0]
+[2.0, 0.0, 0.0]
+[2.0, 0.0, 0.0]
 
-Velocities after shifting:
-[-1.0, 0.0, 0.0]
-[-1.0, 0.0, 0.0]
+[2.0, 0.0, 0.0]
+[2.0, 0.0, 0.0]
 ~~~
 
 Although our velocities are wrong,
 shifting, or *translating* our system
-doesn't change how our code behaves,
-which is a good sign.
+doesn't change its behavior, which is a good sign.
