@@ -19,18 +19,9 @@ the motion of the outer planets (Jupiter, Saturn, Uranus and Neptune)
 around the Sun. Here is the output from our script:
 #FIXME: make this GIF prettier
 #FIXME: explain exactly what the GIF is showing
-![Output from visualization script](fig/planets_broken.gif "this is the image's alt text")
+![Output from visualization script](fig/planets_broken.gif)
 
-It's tempting to be satisfied with this animation. After all,
-our code seems to be working (no errors),
-and producing reasonable results -
-the planets *do* look like they're orbiting the sun...
-But, some investigation will reveal that there's a problem -
-for instance, it is known that
-the planets of the Solar System orbit the Sun in nearly the same plane,
-but the planets in our simulation are clearly *not* rotating in the same plane.
-
-So we know our code needs fixing,
+The output indicates that our code is broken,
 but what's a good way to identify and fix the problem?
 More importantly, once we've fixed it,
 how can we guard against introducing new problems?
