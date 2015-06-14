@@ -39,63 +39,165 @@
 </ul>
 </div>
 </div>
-<p>Let’s consider a much simpler system: two bodies of unit mass, separated by unit distance, and initially at rest (zero velocity):</p>
+<p>Let’s consider a much simpler system: two bodies of unit mass each, separated by a distance of ten units, and initially at rest (zero velocity):</p>
 <pre class="sourceCode python"><code class="sourceCode python"><span class="ch">from</span> nbody <span class="ch">import</span> *
 
-BODIES = {
-    <span class="st">&#39;body-1&#39;</span>: ([-<span class="fl">0.5</span>, <span class="fl">0.0</span>, <span class="fl">0.0</span>], [<span class="fl">0.0</span>, <span class="fl">0.0</span>, <span class="fl">0.0</span>], <span class="dv">1</span>),
-    <span class="co">&#39;body-2&#39;</span>: ([<span class="fl">0.5</span>, <span class="fl">0.0</span>, <span class="fl">0.0</span>], [<span class="fl">0.0</span>, <span class="fl">0.0</span>, <span class="fl">0.0</span>], <span class="dv">1</span>)
-}
+POSITIONS = ([-<span class="dv">5</span>, <span class="fl">0.0</span>, <span class="fl">0.0</span>], [<span class="dv">5</span>, <span class="fl">0.0</span>, <span class="fl">0.0</span>])
+VELOCITIES = ([<span class="fl">0.0</span>, <span class="fl">0.0</span>, <span class="fl">0.0</span>], [<span class="fl">0.0</span>, <span class="fl">0.0</span>, <span class="fl">0.0</span>])
+MASSES = (<span class="fl">1.0</span>, <span class="fl">1.0</span>)
 
-SYSTEM = <span class="dt">list</span>(BODIES.values())
-PAIRS = combinations(SYSTEM)</code></pre>
-<pre class="sourceCode python"><code class="sourceCode python">advance(<span class="dv">1</span>, <span class="dv">1</span>, SYSTEM, PAIRS)</code></pre>
+BODIES = [POSITIONS, VELOCITIES, MASSES]
+
+advance(BODIES, <span class="dv">1</span>, <span class="dv">2</span>)</code></pre>
 <p>One of the first things we need to make sure of is that the masses of the bodies haven’t changed:</p>
-<pre class="sourceCode python"><code class="sourceCode python"><span class="dt">print</span> BODIES[<span class="st">&#39;body-1&#39;</span>][<span class="dv">2</span>]
-<span class="dt">print</span> BODIES[<span class="st">&#39;body-2&#39;</span>][<span class="dv">2</span>]</code></pre>
-<pre class="output"><code>1
-1</code></pre>
+<pre class="sourceCode python"><code class="sourceCode python"><span class="dt">print</span> BODIES[<span class="dv">2</span>][<span class="dv">0</span>]
+<span class="dt">print</span> BODIES[<span class="dv">2</span>][<span class="dv">1</span>]</code></pre>
+<pre class="output"><code>1.0
+1.0</code></pre>
 <p>Gravity is an <em>attractive</em> force, i.e, it pulls bodies closer together. So the second thing that we can check is that the two bodies have moved <em>toward</em> each other, by equal amounts. Since the bodies are of equal mass, and are both initially at rest, we don’t expect that one body should move more than the other. Let’s look at the positions of the bodies before and after advancing the system:</p>
-<pre><code>BODIES = {
-    &#39;body-1&#39;: ([-0.5, 0.0, 0.0], [0.0, 0.0, 0.0], 1),
-    &#39;body-2&#39;: ([0.5, 0.0, 0.0], [0.0, 0.0, 0.0], 1)
-}
-
-SYSTEM = list(BODIES.values())
-PAIRS = combinations(SYSTEM)</code></pre>
-<pre class="sourceCode python"><code class="sourceCode python"><span class="dt">print</span> <span class="st">&#39;Positions before advancing: &#39;</span>
-<span class="dt">print</span> BODIES[<span class="st">&#39;body-1&#39;</span>][<span class="dv">0</span>]
-<span class="dt">print</span> BODIES[<span class="st">&#39;body-2&#39;</span>][<span class="dv">0</span>]</code></pre>
-<pre class="output"><code>[-0.5, 0.0, 0.0]
-[0.5, 0.0, 0.0]</code></pre>
-<pre class="sourceCode python"><code class="sourceCode python">advance(<span class="dv">1</span>, <span class="dv">1</span>, SYSTEM, PAIRS)</code></pre>
-<pre class="sourceCode python"><code class="sourceCode python"><span class="dt">print</span> <span class="st">&#39;Positions after advancing: &#39;</span>
-<span class="dt">print</span> BODIES[<span class="st">&#39;body-1&#39;</span>][<span class="dv">0</span>]
-<span class="dt">print</span> BODIES[<span class="st">&#39;body-2&#39;</span>][<span class="dv">0</span>]</code></pre>
-<pre class="output"><code>[-1.5, 0.0, 0.0]
-[-0.5, 0.0, 0.0]</code></pre>
-<p>That doesn’t look good—it looks like <code>body-1</code> has moved by 1 unit to the left, and <code>body-2</code> has moved by 1 unit… also to the left.</p>
-<p>What about the velocities? We expect these to behave the same; i.e., gravity should cause the bodies to acquire equal <em>and opposite</em> velocities.</p>
-<pre><code>BODIES = {
-    &#39;body-1&#39;: ([-0.5, 0.0, 0.0], [0.0, 0.0, 0.0], 1),
-    &#39;body-2&#39;: ([0.5, 0.0, 0.0], [0.0, 0.0, 0.0], 1)
-}
-
-SYSTEM = list(BODIES.values())
-PAIRS = combinations(SYSTEM)</code></pre>
-<pre class="sourceCode python"><code class="sourceCode python"><span class="dt">print</span> <span class="st">&#39;Velocities before advancing: &#39;</span>
-<span class="dt">print</span> BODIES[<span class="st">&#39;body-1&#39;</span>][<span class="dv">1</span>]
-<span class="dt">print</span> BODIES[<span class="st">&#39;body-2&#39;</span>][<span class="dv">1</span>]</code></pre>
-<pre class="output"><code>[0.0, 0.0, 0.0]
+<pre><code>POSITIONS = ([-5, 0.0, 0.0], [5, 0.0, 0.0])
+VELOCITIES = ([0.0, 0.0, 0.0], [0.0, 0.0, 0.0])
+MASSES = (1.0, 1.0)
+BODIES = [POSITIONS, VELOCITIES, MASSES]</code></pre>
+<pre class="sourceCode python"><code class="sourceCode python"><span class="dt">print</span> <span class="st">&#39;Positions before advancing:&#39;</span>
+<span class="dt">print</span> BODIES[<span class="dv">0</span>][<span class="dv">0</span>]
+<span class="dt">print</span> BODIES[<span class="dv">0</span>][<span class="dv">1</span>]</code></pre>
+<pre class="output"><code>Positions before advancing:
+[-5, 0.0, 0.0]
+[5, 0.0, 0.0]</code></pre>
+<pre class="sourceCode python"><code class="sourceCode python">advance(BODIES, <span class="dv">1</span>, <span class="dv">2</span>)</code></pre>
+<pre class="sourceCode python"><code class="sourceCode python"><span class="dt">print</span> <span class="st">&#39;Positions after advancing:&#39;</span>
+<span class="dt">print</span> BODIES[<span class="dv">0</span>][<span class="dv">0</span>]
+<span class="dt">print</span> BODIES[<span class="dv">0</span>][<span class="dv">1</span>]</code></pre>
+<pre class="output"><code>Positions after advancing:
+[-4.99  0.    0.  ]
+[ 5.01  0.    0.  ]</code></pre>
+<p>That doesn’t look good—it looks like body 1 has moved by 1 unit to the right, and body 2 has moved by 1 unit… also to the right. What about the velocities? We expect these to behave the same; i.e., gravity should cause the bodies to acquire equal <em>and opposite</em> velocities.</p>
+<pre><code>POSITIONS = ([-5, 0.0, 0.0], [5, 0.0, 0.0])
+VELOCITIES = ([0.0, 0.0, 0.0], [0.0, 0.0, 0.0])
+MASSES = (1.0, 1.0)
+BODIES = [POSITIONS, VELOCITIES, MASSES]</code></pre>
+<pre class="sourceCode python"><code class="sourceCode python"><span class="dt">print</span> <span class="st">&#39;Velocities before advancing:&#39;</span>
+<span class="dt">print</span> BODIES[<span class="dv">1</span>][<span class="dv">0</span>]
+<span class="dt">print</span> BODIES[<span class="dv">1</span>][<span class="dv">1</span>]</code></pre>
+<pre class="output"><code>Velocities before advancing:
+[0.0, 0.0, 0.0]
 [0.0, 0.0, 0.0]</code></pre>
-<pre class="sourceCode python"><code class="sourceCode python">advance(<span class="dv">1</span>, <span class="dv">1</span>, SYSTEM, PAIRS)</code></pre>
-<pre class="sourceCode python"><code class="sourceCode python"><span class="dt">print</span> <span class="st">&#39;Velocities after advancing: &#39;</span>
-<span class="dt">print</span> BODIES[<span class="st">&#39;body-1&#39;</span>][<span class="dv">1</span>]
-<span class="dt">print</span> BODIES[<span class="st">&#39;body-2&#39;</span>][<span class="dv">1</span>]</code></pre>
-<pre class="output"><code>[-1.0, 0.0, 0.0]
-[-1.0, 0.0, 0.0]</code></pre>
-<p>Again, the velocities <em>are</em> equal, but they have the same sign (both negative), which suggests that the bodies move in the same direction.</p>
+<pre class="sourceCode python"><code class="sourceCode python">advance(BODIES, <span class="dv">1</span>, <span class="dv">2</span>)</code></pre>
+<pre class="sourceCode python"><code class="sourceCode python"><span class="dt">print</span> <span class="st">&#39;Velocities after advancing:&#39;</span>
+<span class="dt">print</span> BODIES[<span class="dv">1</span>][<span class="dv">0</span>]
+<span class="dt">print</span> BODIES[<span class="dv">1</span>][<span class="dv">1</span>]</code></pre>
+<pre class="output"><code>[0.02, 0.0, 0.0]
+[0.02  , 0.0, 0.0]</code></pre>
+<p>Again, the velocities <em>are</em> equal, but they have the same sign (both positive), which suggests that the bodies move in the same direction (the right).</p>
 <p>Let’s write some more tests to find out more about our code.</p>
+<p>Note that only the separation between bodies is meant to matter. So if we arbitrarily translate all coordinates by some amount, and advance the system by the same amount, the velocities acquired should be the same.</p>
+<pre class="sourceCode python"><code class="sourceCode python">POSITIONS = ([-<span class="dv">5</span>, <span class="fl">0.0</span>, <span class="fl">0.0</span>], [<span class="dv">5</span>, <span class="fl">0.0</span>, <span class="fl">0.0</span>])
+VELOCITIES = ([<span class="fl">0.0</span>, <span class="fl">0.0</span>, <span class="fl">0.0</span>], [<span class="fl">0.0</span>, <span class="fl">0.0</span>, <span class="fl">0.0</span>])
+MASSES = (<span class="fl">1.0</span>, <span class="fl">1.0</span>)
+BODIES = [POSITIONS, VELOCITIES, MASSES]
+
+advance(BODIES, <span class="dv">1</span>, <span class="dv">2</span>)
+<span class="dt">print</span> BODIES[<span class="dv">1</span>][<span class="dv">0</span>]
+<span class="dt">print</span> BODIES[<span class="dv">1</span>][<span class="dv">1</span>]
+
+<span class="co"># now do the same, but</span>
+<span class="co"># shift positions by 1, 2 and 3 units in</span>
+<span class="co"># each co-ordinate direction respectively.</span>
+
+POSITIONS = ([-<span class="dv">5</span>, <span class="fl">0.0</span>, <span class="fl">0.0</span>], [<span class="dv">5</span>, <span class="fl">0.0</span>, <span class="fl">0.0</span>])
+VELOCITIES = ([<span class="fl">0.0</span>, <span class="fl">0.0</span>, <span class="fl">0.0</span>], [<span class="fl">0.0</span>, <span class="fl">0.0</span>, <span class="fl">0.0</span>])
+MASSES = (<span class="fl">1.0</span>, <span class="fl">1.0</span>)
+BODIES = [POSITIONS, VELOCITIES, MASSES]
+
+N = <span class="dt">len</span>(BODIES[<span class="dv">2</span>])
+shift = np.array([<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>])
+<span class="kw">for</span> i in <span class="dt">range</span>(N):
+    <span class="kw">for</span> n in <span class="dt">range</span>(<span class="dv">3</span>):
+        BODIES[<span class="dv">0</span>][i][n] += shift[n]
+
+advance(BODIES, <span class="dv">1</span>, <span class="dv">2</span>)
+
+<span class="dt">print</span> <span class="st">&#39;Velocities after shifting: &#39;</span>
+<span class="dt">print</span> BODIES[<span class="dv">1</span>][<span class="dv">0</span>]
+<span class="dt">print</span> BODIES[<span class="dv">1</span>][<span class="dv">1</span>]</code></pre>
+<pre class="output"><code>[2.0, 0.0, 0.0]
+[2.0, 0.0, 0.0]
+
+[2.0, 0.0, 0.0]
+[2.0, 0.0, 0.0]</code></pre>
+<p>Although our velocities are wrong, shifting, or <em>translating</em> our system doesn’t change its behavior, which is a good sign.</p>
+<p>Our tests have checked that the code satisfies various, simple conditions. Tests like these are useful because when they fail, it’s relatively easy to figure out where the problem is. In our case, there is a problem with the signs of the positions and velocities. The positions are updated from the velocities, and the velocities are updated from the accelerations. Here are the lines of code that compute the accelerations:</p>
+<pre><code>dvdt[i][k] += mag * m[j] * dr[k]
+dvdt[j][k] += mag * m[i] * dr[k]</code></pre>
+<p><code>dvdt[i][k]</code> is the acceleration in the <code>k</code> direction, experienced by the <code>i</code> body due to the <code>j</code> body, and <code>dvdt[j][k]</code> is the acceleration in the <code>k</code> direction, experienced by the <code>j</code> body due to the <code>i</code> body. We know that the two must have <em>opposite</em> signs, but looking at the right hand sides, we can see that they will have the same sign. So we go ahead and change this:</p>
+<pre><code>dvdt[i][k] += mag * m[j] * dr[k]
+dvdt[j][k] -= mag * m[i] * dr[k]</code></pre>
+<p>Now, as before, we look at the positions and velocities before and after advancing the system:</p>
+<pre><code>POSITIONS = ([-5, 0.0, 0.0], [5, 0.0, 0.0])
+VELOCITIES = ([0.0, 0.0, 0.0], [0.0, 0.0, 0.0])
+MASSES = (1.0, 1.0)
+BODIES = [POSITIONS, VELOCITIES, MASSES]</code></pre>
+<pre class="sourceCode python"><code class="sourceCode python"><span class="dt">print</span> <span class="st">&#39;Positions before advancing:&#39;</span>
+<span class="dt">print</span> BODIES[<span class="dv">0</span>][<span class="dv">0</span>]
+<span class="dt">print</span> BODIES[<span class="dv">0</span>][<span class="dv">1</span>]</code></pre>
+<pre class="output"><code>Positions before advancing:
+[-5, 0.0, 0.0]
+[5, 0.0, 0.0]</code></pre>
+<pre class="sourceCode python"><code class="sourceCode python"><span class="dt">print</span> <span class="st">&#39;Velocities before advancing:&#39;</span>
+<span class="dt">print</span> BODIES[<span class="dv">1</span>][<span class="dv">0</span>]
+<span class="dt">print</span> BODIES[<span class="dv">1</span>][<span class="dv">1</span>]</code></pre>
+<pre class="output"><code>Velocities before advancing:
+[0.0, 0.0, 0.0]
+[0.0, 0.0, 0.0]</code></pre>
+<pre class="sourceCode python"><code class="sourceCode python">advance(BODIES, <span class="dv">1</span>, <span class="dv">2</span>)</code></pre>
+<pre class="sourceCode python"><code class="sourceCode python"><span class="dt">print</span> <span class="st">&#39;Positions after advancing:&#39;</span>
+<span class="dt">print</span> BODIES[<span class="dv">0</span>][<span class="dv">0</span>]
+<span class="dt">print</span> BODIES[<span class="dv">0</span>][<span class="dv">1</span>]</code></pre>
+<pre class="output"><code>[-5.01  0.   0. ]
+[5.01  0.   0. ]</code></pre>
+<pre class="sourceCode python"><code class="sourceCode python"><span class="dt">print</span> <span class="st">&#39;Velocities after advancing:&#39;</span>
+<span class="dt">print</span> BODIES[<span class="dv">1</span>][<span class="dv">0</span>]
+<span class="dt">print</span> BODIES[<span class="dv">1</span>][<span class="dv">1</span>]</code></pre>
+<pre class="output"><code>[-0.02.  0.  0.]
+[0.02.  0.  0.]</code></pre>
+<p>Now our positions and velocities are both equal and opposite, but you’ll notice that the bodies are moving in the wrong directions. Gravity should pull them <em>together</em>, but our code is pushing them <em>apart</em>. As you can guess, the fix is to switch the following signs:</p>
+<pre><code>dvdt[i][k] += mag * m[j] * dr[k]
+dvdt[j][k] -= mag * m[i] * dr[k]</code></pre>
+<pre><code>dvdt[i][k] -= mag * m[j] * dr[k]
+dvdt[j][k] += mag * m[i] * dr[k]</code></pre>
+<p>Let’s run our tests one more time:</p>
+<pre><code>POSITIONS = ([-5, 0.0, 0.0], [5, 0.0, 0.0])
+VELOCITIES = ([0.0, 0.0, 0.0], [0.0, 0.0, 0.0])
+MASSES = (1.0, 1.0)
+BODIES = [POSITIONS, VELOCITIES, MASSES]</code></pre>
+<pre class="sourceCode python"><code class="sourceCode python"><span class="dt">print</span> <span class="st">&#39;Positions before advancing:&#39;</span>
+<span class="dt">print</span> BODIES[<span class="dv">0</span>][<span class="dv">0</span>]
+<span class="dt">print</span> BODIES[<span class="dv">0</span>][<span class="dv">1</span>]</code></pre>
+<pre class="output"><code>Positions before advancing:
+[-5, 0.0, 0.0]
+[5, 0.0, 0.0]</code></pre>
+<pre class="sourceCode python"><code class="sourceCode python"><span class="dt">print</span> <span class="st">&#39;Velocities before advancing:&#39;</span>
+<span class="dt">print</span> BODIES[<span class="dv">1</span>][<span class="dv">0</span>]
+<span class="dt">print</span> BODIES[<span class="dv">1</span>][<span class="dv">1</span>]</code></pre>
+<pre class="output"><code>Velocities before advancing:
+[0.0, 0.0, 0.0]
+[0.0, 0.0, 0.0]</code></pre>
+<pre class="sourceCode python"><code class="sourceCode python">advance(BODIES, <span class="dv">1</span>, <span class="dv">2</span>)</code></pre>
+<pre class="sourceCode python"><code class="sourceCode python"><span class="dt">print</span> <span class="st">&#39;Positions after advancing:&#39;</span>
+<span class="dt">print</span> BODIES[<span class="dv">0</span>][<span class="dv">0</span>]
+<span class="dt">print</span> BODIES[<span class="dv">0</span>][<span class="dv">1</span>]</code></pre>
+<pre class="output"><code>[-4.99  0.    0.  ]
+[ 4.99  0.    0.  ]</code></pre>
+<pre class="sourceCode python"><code class="sourceCode python"><span class="dt">print</span> <span class="st">&#39;Velocities after advancing:&#39;</span>
+<span class="dt">print</span> BODIES[<span class="dv">1</span>][<span class="dv">0</span>]
+<span class="dt">print</span> BODIES[<span class="dv">1</span>][<span class="dv">1</span>]</code></pre>
+<pre class="output"><code>[ 0.02  0.    0.  ]
+[-0.02  0.    0.  ]</code></pre>
+<p>Now our code is performing like we expect it to. Let’s make the changes in <code>nbody.py</code>, and run <code>plot_trajectories.py</code>:</p>
+<div class="figure">
+<img src="fig/planets_fixed.gif" alt="Output from visualization script" /><p class="caption">Output from visualization script</p>
+</div>
         </div>
       </div>
       </article>
