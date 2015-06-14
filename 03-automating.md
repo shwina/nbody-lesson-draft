@@ -12,46 +12,44 @@ So far, we've been testing our code using
 `print` statements:
 
 ~~~{.python}
-print 'Positions before advancing: '
-print BODIES['body-1'][0]
-print BODIES['body-2'][0]
+print 'Positions before advancing:'
+print BODIES[0][0]
+print BODIES[0][1]
 ~~~
 
 ~~~{.output}
-[-0.5, 0.0, 0.0]
-[0.5, 0.0, 0.0]
+[-5, 0.0, 0.0]
+[5, 0.0, 0.0]
 ~~~
 
 ~~~{.python}
-advance(1, 1, SYSTEM, PAIRS)
+advance(BODIES, 1, 2)
 ~~~
 
 ~~~{.python}
-print 'Positions after advancing: '
-print BODIES['body-1'][0]
-print BODIES['body-2'][0]
+print 'Positions after advancing:'
+print BODIES[0][0]
+print BODIES[0][1]
 ~~~
 
 ~~~{.output}
-[-1.5, 0.0, 0.0]
-[-0.5, 0.0, 0.0]
+Positions after advancing:
+[-4.99, 0.0, 0.0]
+[4.99, 0.0, 0.0]
 ~~~
 
-We're also re-setting our system for every new test:
+And we are re-setting our system for every new test:
 
 ~~~{.python}
-BODIES = {
-    'body-1': ([-0.5, 0.0, 0.0], [0.0, 0.0, 0.0], 1),
-    'body-2': ([0.5, 0.0, 0.0], [0.0, 0.0, 0.0], 1)
-}
-
-SYSTEM = list(BODIES.values())
-PAIRS = combinations(SYSTEM)
+POSITIONS = ([-5, 0.0, 0.0], [5, 0.0, 0.0])
+VELOCITIES = ([0.0, 0.0, 0.0], [0.0, 0.0, 0.0])
+MASSES = (1.0, 1.0)
+BODIES = [POSITIONS, VELOCITIES, MASSES]
 ~~~
 
 This is a great first step---
 we're doing *some* testing,
-which is more than a lot of programmers.
+which is more than a lot of programmers do.
 But we can do better than using `print` statements.
 `print` needs us to visually inspect and compare
 output every time,
@@ -98,77 +96,80 @@ AssertionError: Masses are not equal
 Using assertions, we can re-write our tests in a script,
 using assertions to check for equality,
 rather than printing the results,
-and inspecting them visually:
+and inspecting them visually.
+We set up the system as before:
 
 ~~~
-# test_nbody.py
+POSITIONS = ([-5, 0.0, 0.0],  [5, 0.0, 0.0])
+VELOCITIES = ([0.0, 0.0, 0.0], [0.0, 0.0, 0.0])
+MASSES = (1.0, 1.0)
 
-from nbody import *
+BODIES = [POSITIONS, VELOCITIES, MASSES]
 
-# Initialize the system:
-BODIES = {
-    'body-1': ([-0.5, 0.0, 0.0], [0.0, 0.0, 0.0], 1),
-    'body-2': ([0.5, 0.0, 0.0], [0.0, 0.0, 0.0], 1)
-}
+advance(BODIES, 1, 2)
+~~~
 
-SYSTEM = list(BODIES.values())
-PAIRS = combinations(SYSTEM)
+And then write our test using an assertion:
 
-# Advance the system by a single time step:
-advance(1, 1, SYSTEM, PAIRS)
+~~~
+assert BODIES[2][0] == BODIES[2][1]
+~~~
 
-# Check that the masses remain unchanged
-assert BODIES['body-1'][1] == BODIES['body-2'][1], 'Masses are not equal'
+Let's go ahead and rewrite more of our tests using
+assertions.
+We'll save them in a *script*, called `test_nbody_assertions.py`:
 
-# Initialize the system:
-BODIES = {
-    'body-1': ([-0.5, 0.0, 0.0], [0.0, 0.0, 0.0], 1),
-    'body-2': ([0.5, 0.0, 0.0], [0.0, 0.0, 0.0], 1)
-}
+~~~
+# test_nbody_assertions.py
 
-SYSTEM = list(BODIES.values())
-PAIRS = combinations(SYSTEM)
+POSITIONS = ([-5, 0.0, 0.0],  [5, 0.0, 0.0])
+VELOCITIES = ([0.0, 0.0, 0.0], [0.0, 0.0, 0.0])
+MASSES = (1.0, 1.0)
 
-# Advance the system by a single time step:
-advance(1, 1, SYSTEM, PAIRS)
+BODIES = [POSITIONS, VELOCITIES, MASSES]
+
+advance(BODIES, 1, 2)
 
 # Check that the displacements (in the x-direction)
 # are equal and opposite, and that all other displacements
 # are zero:
-assert BODIES['body-1'][0][1] == 0.0
-assert BODIES['body-1'][0][2] == 0.0
-assert BODIES['body-2'][0][1] == 0.0
-assert BODIES['body-2'][0][2] == 0.0
-assert BODIES['body-1'][0][0] == -BODIES['body-2'][0][0]
+assert(BODIES[0][0][1] == 0.0)
+assert(BODIES[0][0][2] == 0.0)
+assert(BODIES[0][1][1] == 0.0)
+assert(BODIES[0][1][2] == 0.0)
+assert(BODIES[0][0][0] == -BODIES[0][1][0])
 
-# Initialize the system:
-BODIES = {
-    'body-1': ([-0.5, 0.0, 0.0], [0.0, 0.0, 0.0], 1),
-    'body-2': ([0.5, 0.0, 0.0], [0.0, 0.0, 0.0], 1)
-}
+POSITIONS = ([-5, 0.0, 0.0],  [5, 0.0, 0.0])
+VELOCITIES = ([0.0, 0.0, 0.0], [0.0, 0.0, 0.0])
+MASSES = (1.0, 1.0)
 
-SYSTEM = list(BODIES.values())
-PAIRS = combinations(SYSTEM)
+BODIES = [POSITIONS, VELOCITIES, MASSES]
 
-# Advance the system by a single time step:
-advance(1, 1, SYSTEM, PAIRS)
+advance(BODIES, 1, 2)
 
 # Check that the velocities (in the x-direction)
 # are equal and opposite, and that all other velocities
 # are zero:
-assert BODIES['body-1'][1][1] == 0.0
-assert BODIES['body-1'][1][2] == 0.0
-assert BODIES['body-2'][1][1] == 0.0
-assert BODIES['body-2'][1][2] == 0.0
-assert BODIES['body-1'][1][0] == -BODIES['body-2'][1][0]
-~~~
+assert(BODIES[1][0][1] == 0.0)
+assert(BODIES[1][0][2] == 0.0)
+assert(BODIES[1][1][1] == 0.0)
+assert(BODIES[1][1][2] == 0.0)
+assert(BODIES[1][0][0] == -BODIES[1][1][0])
 
+POSITIONS = ([-5, 0.0, 0.0],  [5, 0.0, 0.0])
+VELOCITIES = ([0.0, 0.0, 0.0], [0.0, 0.0, 0.0])
+MASSES = (1.0, 1.0)
+
+BODIES = [POSITIONS, VELOCITIES, MASSES]
+
+advance(BODIES, 1, 2)
+~~~
 
 Now, every time we want to run our tests,
 we can do so with just a few keystrokes:
 
 ~~~{.bash}
-python test_nbody.py
+python test_nbody_assertions.py
 ~~~
 
 from the command line.
