@@ -39,7 +39,7 @@
 </ul>
 </div>
 </div>
-<p>Let’s consider a much simpler system: two bodies of unit mass, separated by unit distance, and initially at rest (zero velocity):</p>
+<p>Let’s consider a much simpler system: two bodies of unit mass each, separated by a distance of ten units, and initially at rest (zero velocity):</p>
 <pre class="sourceCode python"><code class="sourceCode python"><span class="ch">from</span> nbody <span class="ch">import</span> *
 
 POSITIONS = ([-<span class="dv">5</span>, <span class="fl">0.0</span>, <span class="fl">0.0</span>], [<span class="dv">5</span>, <span class="fl">0.0</span>, <span class="fl">0.0</span>])
@@ -127,13 +127,13 @@ advance(BODIES, <span class="dv">1</span>, <span class="dv">2</span>)
 [2.0, 0.0, 0.0]
 [2.0, 0.0, 0.0]</code></pre>
 <p>Although our velocities are wrong, shifting, or <em>translating</em> our system doesn’t change its behavior, which is a good sign.</p>
-<p>Our tests have checked that the code satisfies various, simple conditions. Tests like these are useful because when they fail, it’s relatively easy to figure out where the problem is. In our case, there is a problem with the signs of the positions and velocities.</p>
+<p>Our tests have checked that the code satisfies various, simple conditions. Tests like these are useful because when they fail, it’s relatively easy to figure out where the problem is. In our case, there is a problem with the signs of the positions and velocities. The positions are updated from the velocities, and the velocities are updated from the accelerations. Here are the lines of code that compute the accelerations:</p>
 <pre><code>dvdt[i][k] += mag * m[j] * dr[k]
 dvdt[j][k] += mag * m[i] * dr[k]</code></pre>
 <p><code>dvdt[i][k]</code> is the acceleration in the <code>k</code> direction, experienced by the <code>i</code> body due to the <code>j</code> body, and <code>dvdt[j][k]</code> is the acceleration in the <code>k</code> direction, experienced by the <code>j</code> body due to the <code>i</code> body. We know that the two must have <em>opposite</em> signs, but looking at the right hand sides, we can see that they will have the same sign. So we go ahead and change this:</p>
 <pre><code>dvdt[i][k] += mag * m[j] * dr[k]
 dvdt[j][k] -= mag * m[i] * dr[k]</code></pre>
-<p>Now, we perform the same test as above:</p>
+<p>Now, as before, we look at the positions and velocities before and after advancing the system:</p>
 <pre><code>POSITIONS = ([-5, 0.0, 0.0], [5, 0.0, 0.0])
 VELOCITIES = ([0.0, 0.0, 0.0], [0.0, 0.0, 0.0])
 MASSES = (1.0, 1.0)
