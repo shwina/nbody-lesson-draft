@@ -10,8 +10,8 @@ minutes: 5
 > * Identify bugs in our code by writing tests for it
 
 Let's consider a much simpler system:
-two bodies of unit mass,
-separated by unit distance,
+two bodies of unit mass each,
+separated by a distance of ten units,
 and initially at rest (zero velocity):
 
 
@@ -189,6 +189,9 @@ Tests like these are useful because when they fail,
 it's relatively easy to figure out where the problem is.
 In our case, there is a problem with the signs of the positions
 and velocities.
+The positions are updated from the velocities,
+and the velocities are updated from the accelerations.
+Here are the lines of code that compute the accelerations:
 
 ~~~
 dvdt[i][k] += mag * m[j] * dr[k]
@@ -209,7 +212,8 @@ dvdt[i][k] += mag * m[j] * dr[k]
 dvdt[j][k] -= mag * m[i] * dr[k]
 ~~~
 
-Now, we perform the same test as above:
+Now, as before, we look at the positions and velocities
+before and after advancing the system:
 
 ~~~
 POSITIONS = ([-5, 0.0, 0.0], [5, 0.0, 0.0])
